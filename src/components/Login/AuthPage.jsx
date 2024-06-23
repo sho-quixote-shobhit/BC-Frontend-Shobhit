@@ -11,6 +11,7 @@ import {
     Input,
     InputGroup,
     InputRightElement,
+    Spinner,
     Text,
     useToast
 } from '@chakra-ui/react';
@@ -47,8 +48,8 @@ const AuthPage = () => {
     const [cpass, setCpass] = useState('');
 
     const handleAccount = async () => {
-
-        //signup
+        setloading(true)
+        //signup    
         if (!signin) {
             if (!fname || !email || !password || !cpass) {
                 toast({
@@ -58,6 +59,7 @@ const AuthPage = () => {
                     duration: 2000,
                     isClosable: true,
                 });
+                setloading(false)
                 return;
             }
             if (password !== cpass) {
@@ -68,11 +70,11 @@ const AuthPage = () => {
                     duration: 2000,
                     isClosable: true,
                 });
+                setloading(false)
                 return;
             }
 
-            await axios.post('http://localhost:5000/auth/signup', { fname, lname, email, password }, { withCredentials: true }).then(res => {
-                setloading(true)
+            await axios.post('https://bc-backend-shobhit.onrender.com/auth/signup', { fname, lname, email, password }, { withCredentials: true }).then(res => {
                 if (res.data.error) {
                     toast({
                         title: res.data.error,
@@ -107,11 +109,11 @@ const AuthPage = () => {
                     duration: 2000,
                     isClosable: true,
                 });
+                setloading(false)
                 return;
             }
 
-            await axios.post('http://localhost:5000/auth/signin', { email, password }, { withCredentials: true }).then(res => {
-                setloading(true)
+            await axios.post('https://bc-backend-shobhit.onrender.com/auth/signin', { email, password }, { withCredentials: true }).then(res => {
                 if (res.data.error) {
                     toast({
                         title: res.data.error,
@@ -266,7 +268,7 @@ const AuthPage = () => {
                             <Button
                                 colorScheme="blue"
                                 onClick={handleAccount}
-                                isLoading={loading}
+                                isLoading = {loading}
                             >
                                 {signin ? 'Sign In' : 'Create Account'}
                             </Button>
@@ -283,7 +285,6 @@ const AuthPage = () => {
                             w="full"
                             mb={3}
                             onClick={handleGuest}
-                            isLoading = {loading}
                         >
                             Guest Account
                         </Button>
